@@ -1,3 +1,4 @@
+import uuid
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, PermissionsMixin)
 from django.db import models
 
@@ -53,10 +54,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=True)
-    customer_xid = models.UUIDField(unique=True, db_index=True, auto_created=True)
+    customer_xid = models.UUIDField(default=uuid.uuid4, unique=True, db_index=True, auto_created=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

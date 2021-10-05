@@ -1,4 +1,3 @@
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import CreateAPIView
 
 from accounts.models import User

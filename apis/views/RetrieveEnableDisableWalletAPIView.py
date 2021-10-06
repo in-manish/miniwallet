@@ -42,6 +42,7 @@ class RetrieveEnableDisableWalletAPIView(APIView):
             wallet.status = Wallet.DISABLED
         else:
             wallet.status = wallet.ACTIVE
+        wallet.save()
         serializer = self.serializer_class(instance=wallet)
         return self.get_response(serializer)
 

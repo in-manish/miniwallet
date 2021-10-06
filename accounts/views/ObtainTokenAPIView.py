@@ -14,5 +14,6 @@ class ObtainTokenAPIView(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user_id': user.pk,
-            'email': user.email
+            'email': user.email,
+            'customer_xid': user.customer_xid,
         })

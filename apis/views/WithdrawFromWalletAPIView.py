@@ -15,7 +15,7 @@ class WithdrawFromWalletAPIView(APIView):
         data = self.request.data
         amount = data.get('amount')
         errors = []
-        if not isinstance(amount, int) or amount < 0:
+        if not isinstance(amount, str) or not amount.isdigit() or int(amount) < 0:
             errors.append('Please Add valid amount')
 
         reference_id = data.get('reference_id')
@@ -28,11 +28,11 @@ class WithdrawFromWalletAPIView(APIView):
     def post(self, request, *args, **kwargs):
         self.validate_data()
         data = self.request.data
-        amount = data.get('amount')
+        amount = int(data.get('amount'))
         reference_id = data.get('reference_id')
         user = self.request.user
         obj = WalletHelper(user=user)
         wallet_instance, transaction_instance = obj.withdraws(amount, reference_id)
         response_data = WalletSerializer(wallet_instance).data
-        response_data['transaction'] = TransactionSerializer(wallet_instance).data
+        response_data['transaction'] = TransactionSerializer(transaction_instance).data
         return Response(data=response_data)

@@ -13,13 +13,16 @@ class TransactionHelper:
 
     def _get_data(self):
         return {
-            'wallet': self.wallet,
+            'wallet': self.wallet.id,
             'amount': self.amount,
             'reference_id': self.reference_id
         }
 
-    def create_transaction(self):
+    def create_transaction(self, is_deposit):
+        if self.wallet.status != Wallet.ACTIVE:
+            raise ValidationError(f"your wallet is not active")
         data = self._get_data()
+        data['is_deposit'] = is_deposit
         serializer = TransactionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

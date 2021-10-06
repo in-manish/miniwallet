@@ -12,7 +12,7 @@ class WalletHelper:
 
     def deposit(self, amount, reference_id):
         obj = TransactionHelper(self.user, amount, reference_id)
-        transaction = obj.create_transaction()
+        transaction = obj.create_transaction(is_deposit=True)
         self.wallet.amount += amount
         self.wallet.save()
         return self.wallet, transaction
@@ -22,7 +22,7 @@ class WalletHelper:
             raise ValidationError(f"Insufficient balance in your to withdraw!")
 
         obj = TransactionHelper(self.user, amount, reference_id)
-        transaction = obj.create_transaction()
+        transaction = obj.create_transaction(is_deposit=False)
         self.wallet.amount -= amount
         self.wallet.save()
         return self.wallet, transaction

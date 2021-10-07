@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^wallet/init$', view=views.InitializeWalletAPIView.as_view(), name='initialize wallet'),
+    url(r'^init$', view=views.InitializeWalletAPIView.as_view(), name='initialize wallet'),
 
     url(r'^wallet/withdrawals$', view=views.WithdrawFromWalletAPIView.as_view(), name='withdraw amount from wallet'),
 

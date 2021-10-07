@@ -1,18 +1,19 @@
+import uuid
 from django.db import models
 from accounts.models import User
 
 
 class Wallet(models.Model):
-    ACTIVE = 'ACTIVE'
-    DISABLED = 'DISABLED'
+    enabled = 'enabled'
+    disabled = 'disabled'
 
     ACCOUNT_STATUS = (
-        (ACTIVE, 'Active'),
-        (DISABLED, 'Disabled'),
+        (enabled, 'enabled'),
+        (disabled, 'disabled'),
     )
-    user = models.OneToOneField(User, related_name='user_wallet', on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, related_name='created_wallets', on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owned_by = models.OneToOneField(User, related_name='customer_wallet', on_delete=models.CASCADE)
     amount = models.PositiveIntegerField(default=0)
-    status = models.CharField(max_length=20, db_index=True, default=ACTIVE, choices=ACCOUNT_STATUS)
+    status = models.CharField(max_length=20, db_index=True, default=enabled, choices=ACCOUNT_STATUS)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

@@ -11,7 +11,11 @@ class TransactionSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super(TransactionSerializer, self).to_representation(instance)
         data['deposited_at'] = data.pop('created_at')
-        data['deposited_by'] = instance.wallet.owned_by.customer_xid
+        customer_xid = instance.wallet.owned_by.customer_xid
+        if instance.is_deposit:
+            data['deposited_by'] = customer_xid
+        else:
+            data['withdrawn_by'] = customer_xid
         return data
 
 

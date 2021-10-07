@@ -124,7 +124,7 @@ class RetrieveEnableDisableWalletAPIView(APIView):
         data['enabled_at'] = data.pop('modified_at')
         data['balance'] = data.pop('amount')
         response_data = get_success_data(data)
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class WithdrawFromWalletAPIView(APIView):
@@ -147,9 +147,9 @@ class WithdrawFromWalletAPIView(APIView):
             raise ValidationError(get_fail_msg(errors))
 
     def get_response(self, transaction_serializer):
-        response_data = {'deposit': transaction_serializer.data}
+        response_data = {'withdrawal': transaction_serializer.data}
         response_data = get_success_data(data=response_data)
-        return Response(data=response_data)
+        return Response(data=response_data, status=status.HTTP_201_CREATED)
 
     def post(self, request, *args, **kwargs):
         self.validate_data()
@@ -185,7 +185,7 @@ class DepositToWalletAPIView(APIView):
     def get_response(self, transaction_serializer):
         response_data = {'deposit': transaction_serializer.data}
         response_data = get_success_data(data=response_data)
-        return Response(data=response_data)
+        return Response(data=response_data, status=status.HTTP_201_CREATED)
 
     def post(self, request, *args, **kwargs):
         self.validate_data()

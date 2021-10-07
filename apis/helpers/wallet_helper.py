@@ -1,5 +1,6 @@
 from .transaction_helper import TransactionHelper
 from rest_framework.exceptions import ValidationError
+from apis.utils import get_fail_msg
 
 
 class WalletHelper:
@@ -11,6 +12,8 @@ class WalletHelper:
         return self.owned_by.customer_wallet
 
     def deposit(self, amount, reference_id):
+        if amount == 0:
+            raise ValidationError(get_fail_msg(f"Add amount greater to '0'"))
         obj = TransactionHelper(self.owned_by, amount, reference_id)
         transaction = obj.create_transaction(is_deposit=True)
         self.wallet.amount += amount
@@ -18,8 +21,10 @@ class WalletHelper:
         return self.wallet, transaction
 
     def withdraws(self, amount, reference_id):
+        if amount == 0:
+            raise ValidationError(get_fail_msg(f"Add amount greater to '0'"))
         if self.wallet.amount - amount < 0:
-            raise ValidationError(f"Insufficient balance in your to withdraw!")
+            raise ValidationError(get_fail_msg(f"Insufficient balance in your to withdraw!"))
 
         obj = TransactionHelper(self.owned_by, amount, reference_id)
         transaction = obj.create_transaction(is_deposit=False)

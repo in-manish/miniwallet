@@ -2,6 +2,7 @@
 from apis.models import Wallet, Transaction
 from rest_framework.exceptions import ValidationError
 from apis.serializers import TransactionSerializer
+from apis.utils import get_fail_msg
 
 
 class TransactionHelper:
@@ -19,7 +20,7 @@ class TransactionHelper:
 
     def create_transaction(self, is_deposit):
         if self.wallet.status != Wallet.enabled:
-            raise ValidationError(f"your wallet is not active")
+            raise ValidationError(get_fail_msg(f"your wallet is not active"))
         data = self._get_data()
         data['status'] = Transaction.success
         serializer = TransactionSerializer(data=data)
@@ -32,5 +33,5 @@ def get_user_wallet(owned_by):
     try:
         wallet = Wallet.objects.get(owned_by=owned_by)
     except Wallet.DoesNotExist:
-        raise ValidationError("wallet have initialized for this user")
+        raise ValidationError(get_fail_msg("wallet have initialized for this user"))
     return wallet

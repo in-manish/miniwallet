@@ -33,6 +33,9 @@ class InitializeWalletAPIView(APIView):
     def get_customer(self):
         data = self.request.data
         customer_id = data.get('customer_xid')
+        if customer_id is None:
+            error_msg = {'customer_xid': ["Missing data for required field."]}
+            raise ValidationError(get_fail_msg(error_msg))
         try:
             customer = User.objects.get(customer_xid=customer_id)
         except User.DoesNotExist:
